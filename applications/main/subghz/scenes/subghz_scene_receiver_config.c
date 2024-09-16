@@ -50,14 +50,16 @@ const uint32_t hopping_value[HOPPING_COUNT] = {
     SubGhzHopperStateRunnig,
 };
 
-#define SPEAKER_COUNT 2
+#define SPEAKER_COUNT 3
 const char* const speaker_text[SPEAKER_COUNT] = {
     "OFF",
     "ON",
+    "EXT.A6",
 };
 const uint32_t speaker_value[SPEAKER_COUNT] = {
     SubGhzSpeakerStateShutdown,
     SubGhzSpeakerStateEnable,
+    SubGhzSpeakerStateExternal,
 };
 #define BIN_RAW_COUNT 2
 const char* const bin_raw_text[BIN_RAW_COUNT] = {
