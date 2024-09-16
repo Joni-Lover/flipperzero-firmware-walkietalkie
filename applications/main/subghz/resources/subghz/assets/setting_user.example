@@ -3,15 +3,20 @@ Filetype: Flipper SubGhz Setting File
 Version: 1
 
 # Add Standard frequencies for your region
-#Add_standard_frequencies: true
+Add_standard_frequencies: true
 
 # Default Frequency: used as default for "Read" and "Read Raw"
 #Default_frequency: 433920000
 
 # Frequencies used for "Read", "Read Raw" and "Frequency Analyzer"
-#Frequency: 300000000
-#Frequency: 310000000
-#Frequency: 320000000
+# Ch 1-7 (similar to 15-21) on Walkie Talkies
+Frequency: 462559000
+Frequency: 462579000
+Frequency: 462598000
+Frequency: 462639000
+Frequency: 462658000
+Frequency: 462678000
+Frequency: 462708000
 
 # Frequencies used for hopping mode (keep this list small or flipper will miss signal)
 #Hopper_frequency: 300000000
@@ -20,6 +25,31 @@ Version: 1
 
 # Custom preset
 # format for CC1101 "Custom_preset_data:" XX YY XX YY .. 00 00 ZZ ZZ ZZ ZZ ZZ ZZ ZZ ZZ, where: XX-register, YY - register data, 00 00 - end load register, ZZ - 8 byte Pa table register
+
+Custom_preset_name: TLK1
+Custom_preset_module: CC1101
+Custom_preset_data: 02 0D 0B 06 08 32 07 04 14 00 13 02 12 04 11 83 10 A7 15 06 18 18 19 1F 1D 00 1C 00 1B 07 20 FB 22 10 21 56 00 00 C0 00 00 00 00 00 00 00
+
+# Read more about CC1101 registers here: https://www.ti.com/lit/ds/symlink/cc1101.pdf
+## Register 0x02: 0x0D  = Serial Data Out  (you can try turning on bit 6 for GDO0_inv so 0x4D)
+## Register 0x0B: 0x06  = Base Frequency   (you can try the default value of 0x0F which is 381kHz)
+#  Register 0x08: 0x32  = Packet control   
+#  Register 0x07: 0x04  = Packet control
+#  Register 0x14: 0x00  = Channel spacing
+#  Register 0x13: 0x02  = Channel spacing
+## Register 0x12: 0x04  = No preable/sync, cs above threshold. 2FSK. (you can try 0x14 for GFSK)
+## Register 0x11: 0x83  = Data rate mantissa (you can try increasing)
+## Register 0x10: 0xA7* = Bandwidth (upper 4-bits), data rate exponent (lower 4-bits) [default was 0x67] (try default. you can try increasing data rate exponent to 0x68. you can try narrowing Bandwidth - larger number like 0xA7 is 135kHz)
+## Register 0x15: 0x06* = Frequency deviation (you can try increasing more [default was 0x04] - first digit 0-7 is exponent. second digit 0-7 is mantissa)
+#  Register 0x18: 0x18  = Main radio state machine configuration
+## Register 0x19: 0x1F* = Frequency offset compensation [default was 0x16] (lower two bits are saturations. bits at 0x18 are compensation gain. you can try default 0x16.)
+## Register 0x1D: 0x00* = AGC control [default was 0x91] (lower two bits are filter samples. upper two bits are hysteresis. bits 0x30 are channel filter samples. you can try default of 0x91)
+#  Register 0x1C: 0x00  = AGC control (carrier sense offset)
+## Register 0x1B: 0x07  = AGC control target. lower three bits is target. (you can try chip default of 0x03 = 33dB instead of 42dB)
+#  Register 0x20: 0xFB  = Wake on radio control
+#  Register 0x22: 0x10  = Front-end TX (not used for listening)
+#  Register 0x21: 0x56  = Front-end RX
+#  PA Table: 00 00 C0 00 00 00 00 00 00 00  (not used for listening)
 
 #Custom_preset_name: AM_1
 #Custom_preset_module: CC1101
