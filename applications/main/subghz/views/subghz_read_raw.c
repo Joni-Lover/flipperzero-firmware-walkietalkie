@@ -289,7 +289,7 @@ void subghz_read_raw_draw(Canvas* canvas, SubGhzReadRAWModel* model) {
     canvas_set_color(canvas, ColorBlack);
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str(canvas, 0, 9, furi_string_get_cstr(model->frequency_str));
-    canvas_draw_str(canvas, 35, 9, furi_string_get_cstr(model->preset_str));
+    canvas_draw_str(canvas, 35, 9, furi_string_get_cstr(model->preset_str)); 
     canvas_draw_str_aligned(
         canvas, 106, 2, AlignRight, AlignTop, furi_string_get_cstr(model->sample_write));
 
@@ -335,6 +335,12 @@ void subghz_read_raw_draw(Canvas* canvas, SubGhzReadRAWModel* model) {
     case SubGhzReadRAWStatusStart:
         elements_button_left(canvas, "Config");
         elements_button_center(canvas, "REC");
+        break;
+
+    case SubGhzReadRAWStatusREC:
+        elements_button_left(canvas, "Freq-");
+        elements_button_center(canvas, "Stop");
+        elements_button_right(canvas, "Freq+");
         break;
 
     default:
@@ -451,6 +457,9 @@ bool subghz_read_raw_input(InputEvent* event, void* context) {
                 if(model->status == SubGhzReadRAWStatusStart) {
                     //Config
                     instance->callback(SubGhzCustomEventViewReadRAWConfig, instance->context);
+            	} else if (model->status == SubGhzReadRAWStatusREC) {
+                    //Freq-
+        	        instance->callback(SubGhzCustomEventViewReadRAWFreqMinus, instance->context);
                 } else if(
                     (model->status == SubGhzReadRAWStatusIDLE) ||
                     (model->status == SubGhzReadRAWStatusLoadKeyIDLE)) {
@@ -472,6 +481,9 @@ bool subghz_read_raw_input(InputEvent* event, void* context) {
                 if(model->status == SubGhzReadRAWStatusIDLE) {
                     //Save
                     instance->callback(SubGhzCustomEventViewReadRAWSave, instance->context);
+                } else if (model->status == SubGhzReadRAWStatusREC) {
+        	        //Freq+
+                    instance->callback(SubGhzCustomEventViewReadRAWFreqPlus, instance->context);                
                 } else if(model->status == SubGhzReadRAWStatusLoadKeyIDLE) {
                     //More
                     instance->callback(SubGhzCustomEventViewReadRAWMore, instance->context);
