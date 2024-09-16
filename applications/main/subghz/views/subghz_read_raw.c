@@ -289,7 +289,8 @@ void subghz_read_raw_draw(Canvas* canvas, SubGhzReadRAWModel* model) {
     canvas_set_color(canvas, ColorBlack);
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str(canvas, 0, 9, furi_string_get_cstr(model->frequency_str));
-    canvas_draw_str(canvas, 35, 9, furi_string_get_cstr(model->preset_str)); 
+    // Removed showing preset to make space for the full frequency number
+    // canvas_draw_str(canvas, 35, 9, furi_string_get_cstr(model->preset_str)); 
     canvas_draw_str_aligned(
         canvas, 106, 2, AlignRight, AlignTop, furi_string_get_cstr(model->sample_write));
 

@@ -148,9 +148,10 @@ void subghz_txrx_get_frequency_and_modulation(
     if(frequency != NULL) {
         furi_string_printf(
             frequency,
-            "%03ld.%02ld",
+            "%03ld,%03ld,%03ld",
             preset->frequency / 1000000 % 1000,
-            preset->frequency / 10000 % 100);
+            preset->frequency / 1000 % 1000,
+            preset->frequency % 1000);
     }
     if(modulation != NULL) {
         furi_string_printf(modulation, "%.2s", furi_string_get_cstr(preset->name));
