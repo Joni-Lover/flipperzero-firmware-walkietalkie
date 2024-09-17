@@ -17,6 +17,7 @@ cd \flipper
 git clone --recursive https://github.com/jamisonderek/flipperzero-firmware-walkietalkie
 cd flipperzero-firmware-walkietalkie
 git checkout jamisonderek/walkietalkie
+git pull
 fbt COMPACT=1 DEBUG=0 FORCE=1 flash_usb_full
 
 ```
