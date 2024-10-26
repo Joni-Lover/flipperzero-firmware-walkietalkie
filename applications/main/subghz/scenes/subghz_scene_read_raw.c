@@ -163,6 +163,30 @@ bool subghz_scene_read_raw_on_event(void* context, SceneManagerEvent event) {
             consumed = true;
             break;
 
+        case SubGhzCustomEventViewReadRAWFreqMinus:
+        {
+            SubGhzRadioPreset preset = subghz_txrx_get_preset(subghz->txrx);
+            subghz_txrx_set_preset(subghz->txrx, furi_string_get_cstr(preset.name), preset.frequency - 500, preset.data, preset.data_size);
+            subghz_scene_read_raw_update_statusbar(subghz);
+            subghz_txrx_rx_start(subghz->txrx);
+            subghz->state_notifications = SubGhzNotificationStateRx;
+            subghz_rx_key_state_set(subghz, SubGhzRxKeyStateAddKey);
+            consumed = true;
+            break;
+        }
+
+        case SubGhzCustomEventViewReadRAWFreqPlus:
+        {
+            SubGhzRadioPreset preset = subghz_txrx_get_preset(subghz->txrx);
+            subghz_txrx_set_preset(subghz->txrx, furi_string_get_cstr(preset.name), preset.frequency + 500, preset.data, preset.data_size);
+            subghz_scene_read_raw_update_statusbar(subghz);
+            subghz_txrx_rx_start(subghz->txrx);
+            subghz->state_notifications = SubGhzNotificationStateRx;
+            subghz_rx_key_state_set(subghz, SubGhzRxKeyStateAddKey);
+            consumed = true;
+            break;
+        }
+
         case SubGhzCustomEventViewReadRAWErase:
             if(subghz_rx_key_state_get(subghz) == SubGhzRxKeyStateAddKey) {
                 if(subghz_scene_read_raw_update_filename(subghz)) {

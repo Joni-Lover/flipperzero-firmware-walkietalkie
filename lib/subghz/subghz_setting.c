@@ -32,6 +32,7 @@ static const uint32_t subghz_frequency_list[] = {
     434420000,
     434775000, /* LPD433 last channels */
     438900000,
+    462500000, // Walkie-talkies (CH1-7, CH15-22)
 
     /* 779 - 928 */
     868350000,

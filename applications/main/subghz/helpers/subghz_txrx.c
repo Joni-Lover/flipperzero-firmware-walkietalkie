@@ -1,5 +1,6 @@
 #include "subghz_txrx_i.h" // IWYU pragma: keep
 
+#include "subghz_types.h"
 #include <lib/subghz/protocols/protocol_items.h>
 #include <applications/drivers/subghz/cc1101_ext/cc1101_ext_interconnect.h>
 #include <lib/subghz/devices/cc1101_int/cc1101_int_interconnect.h>
@@ -147,9 +148,10 @@ void subghz_txrx_get_frequency_and_modulation(
     if(frequency != NULL) {
         furi_string_printf(
             frequency,
-            "%03ld.%02ld",
+            "%03ld,%03ld,%03ld",
             preset->frequency / 1000000 % 1000,
-            preset->frequency / 10000 % 100);
+            preset->frequency / 1000 % 1000,
+            preset->frequency % 1000);
     }
     if(modulation != NULL) {
         furi_string_printf(modulation, "%.2s", furi_string_get_cstr(preset->name));
@@ -446,6 +448,8 @@ void subghz_txrx_speaker_on(SubGhzTxRx* instance) {
         } else {
             instance->speaker_state = SubGhzSpeakerStateDisable;
         }
+    } else if (instance->speaker_state == SubGhzSpeakerStateExternal) {
+        subghz_devices_set_async_mirror_pin(instance->radio_device, &gpio_ext_pa6);
     }
 }
 
@@ -467,6 +471,8 @@ void subghz_txrx_speaker_mute(SubGhzTxRx* instance) {
         if(furi_hal_speaker_is_mine()) {
             subghz_devices_set_async_mirror_pin(instance->radio_device, NULL);
         }
+    } else if (instance->speaker_state == SubGhzSpeakerStateExternal) {
+        subghz_devices_set_async_mirror_pin(instance->radio_device, NULL);
     }
 }
 
@@ -476,6 +482,8 @@ void subghz_txrx_speaker_unmute(SubGhzTxRx* instance) {
         if(furi_hal_speaker_is_mine()) {
             subghz_devices_set_async_mirror_pin(instance->radio_device, &gpio_speaker);
         }
+    } else if (instance->speaker_state == SubGhzSpeakerStateExternal) {
+        subghz_devices_set_async_mirror_pin(instance->radio_device, &gpio_ext_pa6);
     }
 }
 
